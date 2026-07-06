@@ -2,8 +2,7 @@ package com.nnk.springboot.service.impl;
 
 import java.util.List;
 import java.util.Optional;
-
-import com.nnk.springboot.controllers.dto.BidListDto;
+import com.nnk.springboot.dto.BidListDto;
 import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.exception.IdNotFoundException;
 import com.nnk.springboot.mapper.BidListMapper;

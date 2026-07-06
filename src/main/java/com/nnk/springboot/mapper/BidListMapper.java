@@ -1,8 +1,7 @@
 package com.nnk.springboot.mapper;
 
 import java.util.List;
-
-import com.nnk.springboot.controllers.dto.BidListDto;
+import com.nnk.springboot.dto.BidListDto;
 import com.nnk.springboot.domain.BidList;
 import org.mapstruct.Mapper;
 

@@ -1,31 +1,24 @@
-package com.nnk.springboot.controllers.dto;
+package com.nnk.springboot.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import java.sql.Timestamp;
 import lombok.*;
+
+import java.sql.Timestamp;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BidListDto {
-
-    Integer BidListId;
-
-    @NotBlank(message = "Account is mandatory")
+public class TradeDto {
+    Integer tradeId;
     String account;
-
-    @NotBlank(message = "Type is mandatory")
     String type;
-
-    Double bidQuantity;
-    Double askQuantity;
-    Double bid;
-    Double ask;
+    Double buyQuantity;
+    Double sellQuantity;
+    Double buyPrice;
+    Double sellPrice;
     String benchmark;
-    Timestamp bidListDate;
-    String commentary;
+    Timestamp tradeDate;
     String security;
     String status;
     String trader;

@@ -1,6 +1,6 @@
 package com.nnk.springboot.controllers;
 
-import com.nnk.springboot.controllers.dto.BidListDto;
+import com.nnk.springboot.dto.BidListDto;
 import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.exception.AccountIsMandatoryException;
 import com.nnk.springboot.exception.IdNotFoundException;

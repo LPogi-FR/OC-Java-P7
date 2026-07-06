@@ -1,6 +1,14 @@
 package com.nnk.springboot.controllers;
 
+import com.nnk.springboot.dto.CurvePointDto;
 import com.nnk.springboot.domain.CurvePoint;
+import com.nnk.springboot.exception.CurvePointIdIsNullException;
+import com.nnk.springboot.exception.IdNotFoundException;
+import com.nnk.springboot.service.CurvePointService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,47 +16,79 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.Collections;
+import java.util.List;
 
+@Slf4j
 @Controller
+@AllArgsConstructor
 public class CurveController {
-    // TODO: Inject Curve Point service
+    private final CurvePointService service;
 
     @RequestMapping("/curvePoint/list")
-    public String home(Model model)
-    {
-        // TODO: find all Curve Point, add to model
+    public String home(Model model) {
+        List<CurvePointDto> curvePointDtoList = service.findAll();
+        log.info(String.valueOf(curvePointDtoList.size()));
+        model.addAllAttributes(curvePointDtoList);
         return "curvePoint/list";
     }
 
     @GetMapping("/curvePoint/add")
-    public String addBidForm(CurvePoint bid) {
+    public String addCurveForm(CurvePoint curvePoint) {
         return "curvePoint/add";
     }
 
     @PostMapping("/curvePoint/validate")
-    public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Curve list
+    public String validate(@Valid CurvePointDto curvePointDto, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
+            log.error(result.getAllErrors().toString());
+        }
+        try {
+            service.save(curvePointDto);
+            log.info(curvePointDto.toString());
+            model.addAllAttributes(Collections.singleton(curvePointDto));
+        } catch (CurvePointIdIsNullException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error(e.getMessage());
+        }
         return "curvePoint/add";
     }
 
     @GetMapping("/curvePoint/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get CurvePoint by Id and to model then show to the form
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            model.addAttribute(service.findById(id));
+        } catch (IdNotFoundException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error("Bid with id: {} not found.", id);
+        }
         return "curvePoint/update";
     }
 
     @PostMapping("/curvePoint/update/{id}")
-    public String updateBid(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Curve and return Curve list
+    public String updateBid(@PathVariable("id") Integer id, @Valid CurvePointDto curvePointDto,
+                             BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
+            log.error(result.getAllErrors().toString());
+        }
+        try {
+            final var response = new ResponseEntity<>(service.update(id, curvePointDto), HttpStatus.CREATED);
+            log.info(response.toString());
+        } catch (CurvePointIdIsNullException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error(e.getMessage());
+        }
         return "redirect:/curvePoint/list";
     }
 
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Curve by Id and delete the Curve, return to Curve list
+        service.delete(id);
+        log.info("Bid with id: {} deleted.", id);
         return "redirect:/curvePoint/list";
     }
 }
