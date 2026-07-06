@@ -5,7 +5,7 @@ import com.nnk.springboot.dto.UserDto;
 import org.mapstruct.Mapper;
 import java.util.List;
 
-@Mapper(componentModel = "srping")
+@Mapper(componentModel = "spring")
 public interface UserMapper {
     User toEntity(UserDto userDto);
     UserDto toDto(User user);

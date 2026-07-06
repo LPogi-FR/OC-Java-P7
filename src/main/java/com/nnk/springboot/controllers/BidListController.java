@@ -90,7 +90,7 @@ public class BidListController {
         try {
             final var response = new ResponseEntity<>(service.update(id, bidListDto), HttpStatus.CREATED);
             log.info(response.toString());
-        } catch (AccountIsMandatoryException | TypeIsMandatoryException e) {
+        } catch (IdNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             log.error(e.getMessage());
         }

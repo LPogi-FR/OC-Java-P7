@@ -5,7 +5,7 @@ import com.nnk.springboot.dto.RatingDto;
 import org.mapstruct.Mapper;
 import java.util.List;
 
-@Mapper(componentModel = "srping")
+@Mapper(componentModel = "spring")
 public interface RatingMapper {
     Rating toEntity(RatingDto ratingDto);
     RatingDto toDto(Rating rating);

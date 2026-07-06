@@ -5,7 +5,7 @@ import com.nnk.springboot.dto.BidListDto;
 import com.nnk.springboot.domain.BidList;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "srping")
+@Mapper(componentModel = "spring")
 public interface BidListMapper {
     BidList toEntity(BidListDto bidListDto);
     BidListDto toDto(BidList bidList);

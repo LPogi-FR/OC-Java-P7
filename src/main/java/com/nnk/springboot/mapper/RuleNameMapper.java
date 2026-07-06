@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "srping")
+@Mapper(componentModel = "spring")
 public interface RuleNameMapper {
     RuleName toEntity(RuleNameDto ruleNameDto);
     RuleNameDto toDto(RuleName ruleName);

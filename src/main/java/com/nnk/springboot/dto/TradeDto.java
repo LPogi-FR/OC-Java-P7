@@ -1,5 +1,6 @@
 package com.nnk.springboot.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -11,8 +12,11 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class TradeDto {
     Integer tradeId;
+    @NotBlank(message = "Account is mandatory")
     String account;
+    @NotBlank(message = "Type is mandatory")
     String type;
+    @NotBlank(message = "Bought Quantity is mandatory")
     Double buyQuantity;
     Double sellQuantity;
     Double buyPrice;

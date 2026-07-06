@@ -5,7 +5,7 @@ import com.nnk.springboot.dto.TradeDto;
 import org.mapstruct.Mapper;
 import java.util.List;
 
-@Mapper(componentModel = "srping")
+@Mapper(componentModel = "spring")
 public interface TradeMapper {
     Trade toEntity(TradeDto tradeDto);
     TradeDto toDto(Trade trade);
