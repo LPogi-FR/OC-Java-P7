@@ -37,4 +37,5 @@ public class BidList {
     String dealType;
     String sourceListId;
     String side;
+
 }

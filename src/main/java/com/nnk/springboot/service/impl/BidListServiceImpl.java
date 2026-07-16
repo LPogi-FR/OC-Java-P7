@@ -20,7 +20,7 @@ public class BidListServiceImpl implements BidListService {
 
     @Override
     public List<BidListDto> findAll() {
-        return mapper.toDto(repository.findAll());
+        return mapper.toDtoList(repository.findAll());
     }
 
     @Override

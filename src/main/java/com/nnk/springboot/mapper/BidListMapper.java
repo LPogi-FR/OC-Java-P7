@@ -10,6 +10,6 @@ public interface BidListMapper {
     BidList toEntity(BidListDto bidListDto);
     BidListDto toDto(BidList bidList);
 
-    List<BidList> toEntity(List<BidListDto> bidListDtoList);
-    List<BidListDto> toDto(List<BidList> bidListList);
+    List<BidList> toEntityList(List<BidListDto> bidListDtoList);
+    List<BidListDto> toDtoList(List<BidList> bidListList);
 }
