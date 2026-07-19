@@ -12,6 +12,6 @@ public interface CurvePointMapper {
     CurvePoint toEntity(CurvePointDto curvePointDto);
     CurvePointDto toDto(CurvePoint curvePoint);
 
-    List<CurvePoint> toEntity(List<CurvePointDto> curvePointDtoList);
-    List<CurvePointDto> toDto(List<CurvePoint> curvePointList);
+    List<CurvePoint> toEntityList(List<CurvePointDto> curvePointDtoList);
+    List<CurvePointDto> toDtoList(List<CurvePoint> curvePointList);
 }

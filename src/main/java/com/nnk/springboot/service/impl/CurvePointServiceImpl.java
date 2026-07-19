@@ -20,7 +20,7 @@ public class CurvePointServiceImpl implements CurvePointService {
 
     @Override
     public List<CurvePointDto> findAll() {
-        return mapper.toDto(repository.findAll());
+        return mapper.toDtoList(repository.findAll());
     }
 
     @Override

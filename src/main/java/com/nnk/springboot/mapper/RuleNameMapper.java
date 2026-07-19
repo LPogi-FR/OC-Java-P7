@@ -11,6 +11,6 @@ public interface RuleNameMapper {
     RuleName toEntity(RuleNameDto ruleNameDto);
     RuleNameDto toDto(RuleName ruleName);
 
-    List<RuleName> toEntity(List<RuleNameDto> ruleNameDtoList);
-    List<RuleNameDto> toDto(List<RuleName> ruleNameList);
+    List<RuleName> toEntityList(List<RuleNameDto> ruleNameDtoList);
+    List<RuleNameDto> toDtoList(List<RuleName> ruleNameList);
 }

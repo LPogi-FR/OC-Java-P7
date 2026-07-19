@@ -20,7 +20,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     public List<TradeDto> findAll() {
-        return mapper.toDto(repository.findAll());
+        return mapper.toDtoList(repository.findAll());
     }
 
     @Override

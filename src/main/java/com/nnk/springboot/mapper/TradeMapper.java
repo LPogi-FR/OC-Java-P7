@@ -10,6 +10,6 @@ public interface TradeMapper {
     Trade toEntity(TradeDto tradeDto);
     TradeDto toDto(Trade trade);
 
-    List<Trade> toEntity(List<TradeDto> tradeDtoList);
-    List<TradeDto> toDto(List<Trade> tradeList);
+    List<Trade> toEntityList(List<TradeDto> tradeDtoList);
+    List<TradeDto> toDtoList(List<Trade> tradeList);
 }

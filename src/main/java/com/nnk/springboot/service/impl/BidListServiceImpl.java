@@ -18,22 +18,40 @@ public class BidListServiceImpl implements BidListService {
     private final BidListRepository repository;
     private final BidListMapper mapper;
 
+    /**
+     * Find all Bid in database
+     * @return List<BidListDto>
+     */
     @Override
     public List<BidListDto> findAll() {
         return mapper.toDtoList(repository.findAll());
     }
 
+    /**
+     * Save Bid in database
+     * @param bidListDto BidListDto
+     * @return List<BidListDto>
+     */
     @Override
     public BidListDto save(BidListDto bidListDto) {
         repository.save(mapper.toEntity(bidListDto));
         return bidListDto;
     }
-
+    /**
+     * Delete bid in database
+     * @param id Integer
+     */
     @Override
     public void delete(Integer id) {
         repository.deleteById(id);
     }
 
+    /**
+     * Update existing bid in database
+     * @param id Integer
+     * @param bidListDto BidListDto
+     * @return BidListDto
+     */
     @Override
     public BidListDto update(Integer id, BidListDto bidListDto) {
         BidList bidListToUpdate = mapper.toEntity(bidListDto);
@@ -42,6 +60,11 @@ public class BidListServiceImpl implements BidListService {
         return bidListDto;
     }
 
+    /**
+     * Find bid with specific id in database
+     * @param id Integer
+     * @return BidListDto
+     */
     @Override
     public BidListDto findById(Integer id) {
         Optional<BidList> optionnalEntity = repository.findById(id);

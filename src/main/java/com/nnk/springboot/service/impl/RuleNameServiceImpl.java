@@ -20,7 +20,7 @@ public class RuleNameServiceImpl implements RuleNameService {
 
     @Override
     public List<RuleNameDto> findAll() {
-        return mapper.toDto(repository.findAll());
+        return mapper.toDtoList(repository.findAll());
     }
 
     @Override

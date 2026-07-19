@@ -20,7 +20,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public List<RatingDto> findAll() {
-        return mapper.toDto(repository.findAll());
+        return mapper.toDtoList(repository.findAll());
     }
 
     @Override
