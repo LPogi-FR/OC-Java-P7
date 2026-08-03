@@ -18,22 +18,41 @@ public class RuleNameServiceImpl implements RuleNameService {
     private final RuleNameMapper mapper;
     private final RuleNameRepository repository;
 
+    /**
+     * Find all rulename in database
+     * @return List<RuleNameDto>
+     */
     @Override
     public List<RuleNameDto> findAll() {
         return mapper.toDtoList(repository.findAll());
     }
 
+    /**
+     * Save rulename in database
+     * @param ruleNameDto RuleNameDto
+     * @return List<RuleNameDto>
+     */
     @Override
     public RuleNameDto save(RuleNameDto ruleNameDto) {
         repository.save(mapper.toEntity(ruleNameDto));
         return ruleNameDto;
     }
 
+    /**
+     * Delete rulename in database
+     * @param id Integer
+     */
     @Override
     public void delete(Integer id) {
         repository.deleteById(id);
     }
 
+    /**
+     * Update existing rulename in database
+     * @param id Integer
+     * @param ruleNameDto RuleNameDto
+     * @return RuleNameDto
+     */
     @Override
     public RuleNameDto update(Integer id, RuleNameDto ruleNameDto) {
         RuleName ruleNameToUpdate = mapper.toEntity(ruleNameDto);
@@ -42,6 +61,11 @@ public class RuleNameServiceImpl implements RuleNameService {
         return ruleNameDto;
     }
 
+    /**
+     * Find rulename with specific id in database
+     * @param id Integer
+     * @return RuleNameDto
+     */
     @Override
     public RuleNameDto findById(Integer id) {
         Optional<RuleName> optionnalEntity = repository.findById(id);

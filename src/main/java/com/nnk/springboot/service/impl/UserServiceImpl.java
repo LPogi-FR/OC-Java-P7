@@ -7,6 +7,7 @@ import com.nnk.springboot.mapper.UserMapper;
 import com.nnk.springboot.repositories.UserRepository;
 import com.nnk.springboot.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -15,25 +16,48 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final PasswordEncoder passwordEncoder;
     private  final UserMapper mapper;
     private final UserRepository repository;
 
+
+    /**
+     * Find all user in database
+     * @return List<UserDto>
+     */
     @Override
     public List<UserDto> findAll() {
         return mapper.toDtoList(repository.findAll());
     }
 
+    /**
+     * Save Bid in database
+     * @param userDto UserDto
+     * @return List<UserDto>
+     */
     @Override
     public UserDto save(UserDto userDto) {
+
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         repository.save(mapper.toEntity(userDto));
         return userDto;
     }
 
+    /**
+     * Delete user in database
+     * @param id Integer
+     */
     @Override
     public void delete(Integer id) {
         repository.deleteById(id);
     }
 
+    /**
+     * Update existing user in database
+     * @param id Integer
+     * @param userDto UserDto
+     * @return UserDto
+     */
     @Override
     public UserDto update(Integer id, UserDto userDto) {
         User userToUpdate = mapper.toEntity(userDto);
@@ -42,6 +66,11 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
+    /**
+     * Find user with specific id in database
+     * @param id Integer
+     * @return UserDto
+     */
     @Override
     public UserDto findById(Integer id) {
         Optional<User> optionnalEntity = repository.findById(id);
@@ -51,4 +80,5 @@ public class UserServiceImpl implements UserService {
             throw new IdNotFoundException("Id not found");
         }
     }
+
 }

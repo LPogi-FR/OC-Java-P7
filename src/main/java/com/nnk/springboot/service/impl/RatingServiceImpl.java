@@ -18,22 +18,41 @@ public class RatingServiceImpl implements RatingService {
     private final RatingMapper mapper;
     private final RatingRepository repository;
 
+    /**
+     * Find all rating in database
+     * @return List<RatingDto>
+     */
     @Override
     public List<RatingDto> findAll() {
         return mapper.toDtoList(repository.findAll());
     }
 
+    /**
+     * Save rating in database
+     * @param ratingDto RatingDto
+     * @return List<RatingDto>
+     */
     @Override
     public RatingDto save(RatingDto ratingDto) {
         repository.save(mapper.toEntity(ratingDto));
         return ratingDto;
     }
 
+    /**
+     * Delete rating in database
+     * @param id Integer
+     */
     @Override
     public void delete(Integer id) {
         repository.deleteById(id);
     }
 
+    /**
+     * Update existing rating in database
+     * @param id Integer
+     * @param ratingDto RatingDto
+     * @return RatingDto
+     */
     @Override
     public RatingDto update(Integer id, RatingDto ratingDto) {
         Rating ratingToUpdate = mapper.toEntity(ratingDto);
@@ -42,6 +61,11 @@ public class RatingServiceImpl implements RatingService {
         return ratingDto;
     }
 
+    /**
+     * Find rating with specific id in database
+     * @param id Integer
+     * @return RatingDto
+     */
     @Override
     public RatingDto findById(Integer id) {
         Optional<Rating> optionnalEntity = repository.findById(id);
