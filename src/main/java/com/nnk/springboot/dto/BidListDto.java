@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 public class BidListDto {
 
-    Integer BidListId;
+    Integer id;
 
     @NotBlank(message = "Account is mandatory")
     String account;

@@ -1,6 +1,7 @@
 package com.nnk.springboot.config;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 /**
  * Spring Security configuration to set authentication and authorization parameters on specific pages of the app.
  */
+@Slf4j
 @Configuration
 @AllArgsConstructor
 @EnableWebSecurity
@@ -31,22 +33,24 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) {
 
         return http
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/login", "/css/**", "/js/**", "/images/**")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
-                )
-                .formLogin(form ->
-                        form.loginPage("/app/login")
-                                .defaultSuccessUrl("/user/list", true)
-                                .failureUrl("/login?error=true")
-                                .permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/403", "/css/**", "/js/**", "/images/**")
+                        .permitAll()
+                        .requestMatchers("/secure/article-details", "/user/**")
+                        .hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll())
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/403")))
                 .build();
     }
 

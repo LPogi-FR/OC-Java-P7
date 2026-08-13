@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,15 +31,19 @@ public class BidListController {
     private final BidListService service;
 
     @RequestMapping("/bidList/list")
-    public String home(Model model) {
+    public String home(Model model, Authentication authentication) {
         List<BidListDto> listOfBidList = service.findAll();
         log.info(String.valueOf(listOfBidList.size()));
-        model.addAllAttributes(listOfBidList);
+        model.addAttribute("bidLists",listOfBidList);
+        model.addAttribute("username",authentication.getName());
         return "bidList/list";
     }
 
     @GetMapping("/bidList/add")
-    public String addBidForm(BidList bid) {
+    public String addBidForm(BidListDto bid,Model model , Authentication authentication) {
+        model.addAttribute("bidList",bid);
+        model.addAttribute("username",authentication.getName());
+
         return "bidList/add";
     }
 
@@ -48,7 +53,9 @@ public class BidListController {
             BindingResult result,
             Model model,
             RedirectAttributes redirectAttributes
-    ) {
+    ,Authentication authentication) {
+        model.addAttribute("username",authentication.getName());
+        model.addAttribute("bidList",bidListDto);
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
             log.error(result.getAllErrors().toString());
@@ -61,11 +68,13 @@ public class BidListController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             log.error(e.getMessage());
         }
-        return "bidList/add";
+        return "bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes,Authentication authentication) {
+        model.addAttribute("username",authentication.getName());
+
         try {
             model.addAttribute(service.findById(id));
         } catch (IdNotFoundException e) {
@@ -82,7 +91,9 @@ public class BidListController {
             BindingResult result,
             Model model,
             RedirectAttributes redirectAttributes
-    ) {
+    ,Authentication authentication) {
+        model.addAttribute("username",authentication.getName());
+
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
             log.error(result.getAllErrors().toString());
@@ -98,7 +109,8 @@ public class BidListController {
     }
 
     @GetMapping("/bidList/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model) {
+    public String deleteBid(@PathVariable("id") Integer id, Model model,Authentication authentication) {
+        model.addAttribute("username",authentication.getName());
         service.delete(id);
         log.info("Bid with id: {} deleted.", id);
         return "redirect:/bidList/list";

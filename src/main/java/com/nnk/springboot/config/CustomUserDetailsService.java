@@ -1,6 +1,7 @@
 package com.nnk.springboot.config;
 
 import com.nnk.springboot.repositories.UserRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -31,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      * @throws UsernameNotFoundException If the user is not found.
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
 
         com.nnk.springboot.domain.User user = userRepository.findByUsername(username);
 
@@ -42,7 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new User(user.getUsername(), user.getPassword(), getGrantedAuthorities(user.getRole()));
     }
     private List<GrantedAuthority> getGrantedAuthorities(String role) {
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
         return authorities;
     }

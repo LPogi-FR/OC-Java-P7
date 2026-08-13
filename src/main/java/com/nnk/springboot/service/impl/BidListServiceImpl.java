@@ -55,7 +55,7 @@ public class BidListServiceImpl implements BidListService {
     @Override
     public BidListDto update(Integer id, BidListDto bidListDto) {
         BidList bidListToUpdate = mapper.toEntity(bidListDto);
-        bidListToUpdate.setBidListId(id);
+        bidListToUpdate.setId(id);
         repository.save(bidListToUpdate);
         return bidListDto;
     }
