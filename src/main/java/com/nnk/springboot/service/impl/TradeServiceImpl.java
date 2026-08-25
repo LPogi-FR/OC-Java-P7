@@ -56,7 +56,7 @@ public class TradeServiceImpl implements TradeService {
     @Override
     public TradeDto update(Integer id, TradeDto tradeDto) {
         Trade tradeToUpdate = mapper.toEntity(tradeDto);
-        tradeToUpdate.setTradeId(id);
+        tradeToUpdate.setId(id);
         repository.save(tradeToUpdate);
         return tradeDto;
     }

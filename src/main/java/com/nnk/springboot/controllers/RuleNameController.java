@@ -1,13 +1,11 @@
 package com.nnk.springboot.controllers;
 
-import com.nnk.springboot.domain.RuleName;
 import com.nnk.springboot.dto.RuleNameDto;
 import com.nnk.springboot.exception.IdNotFoundException;
 import com.nnk.springboot.service.RuleNameService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -27,68 +24,72 @@ public class RuleNameController {
 private final RuleNameService service;
 
     @RequestMapping("/ruleName/list")
-    public String home(Model model)
+    public String home(Model model, Authentication authentication)
     {
         List<RuleNameDto> ruleNameDtoList = service.findAll();
         log.info(String.valueOf(ruleNameDtoList.size()));
-        model.addAllAttributes(ruleNameDtoList);
+        model.addAttribute("ruleNames",ruleNameDtoList);
+        model.addAttribute("username",authentication.getName());
+
         return "ruleName/list";
     }
 
     @GetMapping("/ruleName/add")
-    public String addRuleForm(RuleName bid) {
-        return "ruleName/add";
+    public String addRuleForm(RuleNameDto ruleNameDto,Model model ,Authentication authentication) {
+
+       model.addAttribute("username",authentication.getName());
+       model.addAttribute("ruleNameDto",ruleNameDto);
+
+       return "ruleName/add";
     }
 
     @PostMapping("/ruleName/validate")
-    public String validate(@Valid RuleNameDto ruleNameDto, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    public String validate(@Valid RuleNameDto ruleNameDto, BindingResult result, Model model, RedirectAttributes redirectAttributes,Authentication authentication) {
+
+        model.addAttribute("username",authentication.getName());
+
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
             log.error(result.getAllErrors().toString());
+            return  "ruleName/add";
         }
-        try {
-            service.save(ruleNameDto);
-            log.info(ruleNameDto.toString());
-            model.addAllAttributes(Collections.singleton(ruleNameDto));
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-            log.error(e.getMessage());
-        }
-        return "ruleName/add";
+        service.save(ruleNameDto);
+        log.info(ruleNameDto.toString());
+        model.addAttribute("ruleNameDto",ruleNameDto);
+        return "redirect:/ruleName/list";
     }
 
     @GetMapping("/ruleName/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes,Authentication authentication) {
+        model.addAttribute("username",authentication.getName());
         try {
-            model.addAttribute(service.findById(id));
+            model.addAttribute("ruleNameDto",service.findById(id));
         } catch (IdNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            log.error("Bid with id: {} not found.", id);
+            log.error("RuleName with id: {} not found.", id);
         }
         return "ruleName/update";
     }
 
     @PostMapping("/ruleName/update/{id}")
-    public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleNameDto ruleNameDto,
-                             BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleNameDto ruleNameDto, BindingResult result, Model model,Authentication authentication) {
+        model.addAttribute("username",authentication.getName());
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
             log.error(result.getAllErrors().toString());
+            return "ruleName/update";
         }
         try {
-            final var response = new ResponseEntity<>(service.update(id, ruleNameDto), HttpStatus.CREATED);
-            log.info(response.toString());
+            service.update(id,ruleNameDto);
         } catch ( Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
             log.error(e.getMessage());
         }
         return "redirect:/ruleName/list";
     }
 
     @GetMapping("/ruleName/delete/{id}")
-    public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
+    public String deleteRuleName(@PathVariable("id") Integer id, Model model,Authentication authentication) {
         service.delete(id);
-        log.info("Bid with id: {} deleted.", id);
+        model.addAttribute("username",authentication.getName());
+        log.info("RuleName with id: {} deleted.", id);
         return "redirect:/ruleName/list";
     }
 }

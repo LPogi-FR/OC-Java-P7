@@ -1,16 +1,11 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.dto.BidListDto;
-import com.nnk.springboot.domain.BidList;
-import com.nnk.springboot.exception.AccountIsMandatoryException;
 import com.nnk.springboot.exception.IdNotFoundException;
-import com.nnk.springboot.exception.TypeIsMandatoryException;
 import com.nnk.springboot.service.BidListService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -41,42 +35,33 @@ public class BidListController {
 
     @GetMapping("/bidList/add")
     public String addBidForm(BidListDto bid,Model model , Authentication authentication) {
-        model.addAttribute("bidList",bid);
+
+        model.addAttribute("bidListDto",bid);
         model.addAttribute("username",authentication.getName());
 
         return "bidList/add";
     }
 
     @PostMapping("/bidList/validate")
-    public String validate(
-            @Valid BidListDto bidListDto,
-            BindingResult result,
-            Model model,
-            RedirectAttributes redirectAttributes
-    ,Authentication authentication) {
+    public String validate(@Valid BidListDto bidListDto,BindingResult result,Model model,Authentication authentication) {
+
         model.addAttribute("username",authentication.getName());
-        model.addAttribute("bidList",bidListDto);
+
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
             log.error(result.getAllErrors().toString());
+            return "bidList/add";
         }
-        try {
-            service.save(bidListDto);
-            log.info(bidListDto.toString());
-            model.addAllAttributes(Collections.singleton(bidListDto));
-        } catch (AccountIsMandatoryException | TypeIsMandatoryException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-            log.error(e.getMessage());
-        }
-        return "bidList/list";
+        service.save(bidListDto);
+        log.info(bidListDto.toString());
+        model.addAttribute("bidListDto",bidListDto);
+        return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes,Authentication authentication) {
         model.addAttribute("username",authentication.getName());
-
         try {
-            model.addAttribute(service.findById(id));
+            model.addAttribute("bidListDto",service.findById(id));
         } catch (IdNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             log.error("Bid with id: {} not found.", id);
@@ -85,26 +70,18 @@ public class BidListController {
     }
 
     @PostMapping("/bidList/update/{id}")
-    public String updateBid(
-            @PathVariable("id") Integer id,
-            @Valid BidListDto bidListDto,
-            BindingResult result,
-            Model model,
-            RedirectAttributes redirectAttributes
-    ,Authentication authentication) {
+    public String updateBid(@PathVariable("id") Integer id,@Valid BidListDto bidListDto,BindingResult result,Model model,Authentication authentication) {
         model.addAttribute("username",authentication.getName());
-
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
             log.error(result.getAllErrors().toString());
+            return "bidList/update";
         }
         try {
-            final var response = new ResponseEntity<>(service.update(id, bidListDto), HttpStatus.CREATED);
-            log.info(response.toString());
+           service.update(id,bidListDto);
         } catch (IdNotFoundException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
             log.error(e.getMessage());
         }
+        model.addAttribute("bidListDto",bidListDto);
         return "redirect:/bidList/list";
     }
 

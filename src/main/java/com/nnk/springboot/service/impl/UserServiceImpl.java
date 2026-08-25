@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService {
     public UserDto update(Integer id, UserDto userDto) {
         User userToUpdate = mapper.toEntity(userDto);
         userToUpdate.setId(id);
+        userToUpdate.setPassword(passwordEncoder.encode(userDto.getPassword()));
         repository.save(userToUpdate);
         return userDto;
     }
