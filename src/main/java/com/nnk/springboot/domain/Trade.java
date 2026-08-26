@@ -13,8 +13,9 @@ import java.sql.Timestamp;
 @Table(name = "trade")
 public class Trade {
     @Id
+    @Column(name = "trade_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer tradeId;
+    Integer id;
     String account;
     String type;
     Double buyQuantity;

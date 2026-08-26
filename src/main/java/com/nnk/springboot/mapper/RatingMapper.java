@@ -10,6 +10,6 @@ public interface RatingMapper {
     Rating toEntity(RatingDto ratingDto);
     RatingDto toDto(Rating rating);
 
-    List<Rating> toEntity(List<RatingDto> ratingDtoList);
-    List<RatingDto> toDto(List<Rating> ratingList);
+    List<Rating> toEntityList(List<RatingDto> ratingDtoList);
+    List<RatingDto> toDtoList(List<Rating> ratingList);
 }

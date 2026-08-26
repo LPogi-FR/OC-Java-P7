@@ -6,6 +6,7 @@ import com.nnk.springboot.exception.IdNotFoundException;
 import com.nnk.springboot.mapper.RatingMapper;
 import com.nnk.springboot.repositories.RatingRepository;
 import com.nnk.springboot.service.RatingService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -18,23 +19,45 @@ public class RatingServiceImpl implements RatingService {
     private final RatingMapper mapper;
     private final RatingRepository repository;
 
+    /**
+     * Find all rating in database
+     * @return List<RatingDto>
+     */
     @Override
     public List<RatingDto> findAll() {
-        return mapper.toDto(repository.findAll());
+        return mapper.toDtoList(repository.findAll());
     }
 
+    /**
+     * Save rating in database
+     * @param ratingDto RatingDto
+     * @return List<RatingDto>
+     */
     @Override
+    @Transactional
     public RatingDto save(RatingDto ratingDto) {
         repository.save(mapper.toEntity(ratingDto));
         return ratingDto;
     }
 
+    /**
+     * Delete rating in database
+     * @param id Integer
+     */
     @Override
+    @Transactional
     public void delete(Integer id) {
         repository.deleteById(id);
     }
 
+    /**
+     * Update existing rating in database
+     * @param id Integer
+     * @param ratingDto RatingDto
+     * @return RatingDto
+     */
     @Override
+    @Transactional
     public RatingDto update(Integer id, RatingDto ratingDto) {
         Rating ratingToUpdate = mapper.toEntity(ratingDto);
         ratingToUpdate.setId(id);
@@ -42,6 +65,11 @@ public class RatingServiceImpl implements RatingService {
         return ratingDto;
     }
 
+    /**
+     * Find rating with specific id in database
+     * @param id Integer
+     * @return RatingDto
+     */
     @Override
     public RatingDto findById(Integer id) {
         Optional<Rating> optionnalEntity = repository.findById(id);

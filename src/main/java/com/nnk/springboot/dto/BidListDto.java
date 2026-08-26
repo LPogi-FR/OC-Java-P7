@@ -2,6 +2,8 @@ package com.nnk.springboot.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -11,14 +13,12 @@ import lombok.*;
 @AllArgsConstructor
 public class BidListDto {
 
-    Integer BidListId;
-
+    Integer id;
     @NotBlank(message = "Account is mandatory")
     String account;
-
     @NotBlank(message = "Type is mandatory")
     String type;
-
+    @NotNull
     Double bidQuantity;
     Double askQuantity;
     Double bid;

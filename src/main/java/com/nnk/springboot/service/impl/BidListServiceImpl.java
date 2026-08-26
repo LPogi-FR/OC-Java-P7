@@ -8,6 +8,7 @@ import com.nnk.springboot.exception.IdNotFoundException;
 import com.nnk.springboot.mapper.BidListMapper;
 import com.nnk.springboot.repositories.BidListRepository;
 import com.nnk.springboot.service.BidListService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,30 +19,56 @@ public class BidListServiceImpl implements BidListService {
     private final BidListRepository repository;
     private final BidListMapper mapper;
 
+    /**
+     * Find all Bid in database
+     * @return List<BidListDto>
+     */
     @Override
     public List<BidListDto> findAll() {
-        return mapper.toDto(repository.findAll());
+        return mapper.toDtoList(repository.findAll());
     }
 
+    /**
+     * Save Bid in database
+     * @param bidListDto BidListDto
+     * @return List<BidListDto>
+     */
     @Override
+    @Transactional
     public BidListDto save(BidListDto bidListDto) {
         repository.save(mapper.toEntity(bidListDto));
         return bidListDto;
     }
-
+    /**
+     * Delete bid in database
+     * @param id Integer
+     */
     @Override
+    @Transactional
     public void delete(Integer id) {
         repository.deleteById(id);
     }
 
+    /**
+     * Update existing bid in database
+     * @param id Integer
+     * @param bidListDto BidListDto
+     * @return BidListDto
+     */
     @Override
+    @Transactional
     public BidListDto update(Integer id, BidListDto bidListDto) {
         BidList bidListToUpdate = mapper.toEntity(bidListDto);
-        bidListToUpdate.setBidListId(id);
+        bidListToUpdate.setId(id);
         repository.save(bidListToUpdate);
         return bidListDto;
     }
 
+    /**
+     * Find bid with specific id in database
+     * @param id Integer
+     * @return BidListDto
+     */
     @Override
     public BidListDto findById(Integer id) {
         Optional<BidList> optionnalEntity = repository.findById(id);

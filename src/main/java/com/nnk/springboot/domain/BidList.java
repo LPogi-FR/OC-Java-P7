@@ -14,27 +14,29 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class BidList {
     @Id
+    @Column(name = "bid_list_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer BidListId;
-    String account;
-    String type;
-    Double bidQuantity;
-    Double askQuantity;
-    Double bid;
-    Double ask;
-    String benchmark;
-    Timestamp bidListDate;
-    String commentary;
-    String security;
-    String status;
-    String trader;
-    String book;
-    String creationName;
-    Timestamp creationDate;
-    String revisionName;
-    Timestamp revisionDate;
-    String dealName;
-    String dealType;
-    String sourceListId;
-    String side;
+    private   Integer id;
+    private   String account;
+    private  String type;
+    private  Double bidQuantity;
+    private  Double askQuantity;
+    private  Double bid;
+    private  Double ask;
+    private String benchmark;
+    private Timestamp bidListDate;
+    private String commentary;
+    private  String security;
+    private  String status;
+    private  String trader;
+    private   String book;
+    private   String creationName;
+    private   Timestamp creationDate;
+    private   String revisionName;
+    private   Timestamp revisionDate;
+    private   String dealName;
+    private   String dealType;
+    private   String sourceListId;
+    private   String side;
+
 }
