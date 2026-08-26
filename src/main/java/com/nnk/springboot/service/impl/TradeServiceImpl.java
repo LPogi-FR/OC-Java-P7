@@ -6,6 +6,7 @@ import com.nnk.springboot.exception.IdNotFoundException;
 import com.nnk.springboot.mapper.TradeMapper;
 import com.nnk.springboot.repositories.TradeRepository;
 import com.nnk.springboot.service.TradeService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -33,6 +34,7 @@ public class TradeServiceImpl implements TradeService {
      * @return List<TradeDto>
      */
     @Override
+    @Transactional
     public TradeDto save(TradeDto tradeDto) {
         repository.save(mapper.toEntity(tradeDto));
         return tradeDto;
@@ -43,6 +45,7 @@ public class TradeServiceImpl implements TradeService {
      * @param id Integer
      */
     @Override
+    @Transactional
     public void delete(Integer id) {
         repository.deleteById(id);
     }
@@ -54,6 +57,7 @@ public class TradeServiceImpl implements TradeService {
      * @return TradeDto
      */
     @Override
+    @Transactional
     public TradeDto update(Integer id, TradeDto tradeDto) {
         Trade tradeToUpdate = mapper.toEntity(tradeDto);
         tradeToUpdate.setId(id);

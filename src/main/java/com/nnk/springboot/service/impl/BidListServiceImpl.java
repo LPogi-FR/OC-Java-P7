@@ -8,6 +8,7 @@ import com.nnk.springboot.exception.IdNotFoundException;
 import com.nnk.springboot.mapper.BidListMapper;
 import com.nnk.springboot.repositories.BidListRepository;
 import com.nnk.springboot.service.BidListService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class BidListServiceImpl implements BidListService {
      * @return List<BidListDto>
      */
     @Override
+    @Transactional
     public BidListDto save(BidListDto bidListDto) {
         repository.save(mapper.toEntity(bidListDto));
         return bidListDto;
@@ -42,6 +44,7 @@ public class BidListServiceImpl implements BidListService {
      * @param id Integer
      */
     @Override
+    @Transactional
     public void delete(Integer id) {
         repository.deleteById(id);
     }
@@ -53,6 +56,7 @@ public class BidListServiceImpl implements BidListService {
      * @return BidListDto
      */
     @Override
+    @Transactional
     public BidListDto update(Integer id, BidListDto bidListDto) {
         BidList bidListToUpdate = mapper.toEntity(bidListDto);
         bidListToUpdate.setId(id);

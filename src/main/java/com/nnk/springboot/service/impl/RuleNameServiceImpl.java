@@ -6,6 +6,7 @@ import com.nnk.springboot.exception.IdNotFoundException;
 import com.nnk.springboot.mapper.RuleNameMapper;
 import com.nnk.springboot.repositories.RuleNameRepository;
 import com.nnk.springboot.service.RuleNameService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -33,6 +34,7 @@ public class RuleNameServiceImpl implements RuleNameService {
      * @return List<RuleNameDto>
      */
     @Override
+    @Transactional
     public RuleNameDto save(RuleNameDto ruleNameDto) {
         repository.save(mapper.toEntity(ruleNameDto));
         return ruleNameDto;
@@ -43,6 +45,7 @@ public class RuleNameServiceImpl implements RuleNameService {
      * @param id Integer
      */
     @Override
+    @Transactional
     public void delete(Integer id) {
         repository.deleteById(id);
     }
@@ -54,6 +57,7 @@ public class RuleNameServiceImpl implements RuleNameService {
      * @return RuleNameDto
      */
     @Override
+    @Transactional
     public RuleNameDto update(Integer id, RuleNameDto ruleNameDto) {
         RuleName ruleNameToUpdate = mapper.toEntity(ruleNameDto);
         ruleNameToUpdate.setId(id);

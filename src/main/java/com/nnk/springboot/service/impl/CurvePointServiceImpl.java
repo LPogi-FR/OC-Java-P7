@@ -6,6 +6,7 @@ import com.nnk.springboot.exception.IdNotFoundException;
 import com.nnk.springboot.mapper.CurvePointMapper;
 import com.nnk.springboot.repositories.CurvePointRepository;
 import com.nnk.springboot.service.CurvePointService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -33,6 +34,7 @@ public class CurvePointServiceImpl implements CurvePointService {
      * @return List<CurvePointDto>
      */
     @Override
+    @Transactional
     public CurvePointDto save(CurvePointDto curvePointDto) {
         repository.save(mapper.toEntity(curvePointDto));
         return curvePointDto;
@@ -43,6 +45,7 @@ public class CurvePointServiceImpl implements CurvePointService {
      * @param id Integer
      */
     @Override
+    @Transactional
     public void delete(Integer id) {
         repository.deleteById(id);
     }
@@ -54,6 +57,7 @@ public class CurvePointServiceImpl implements CurvePointService {
      * @return CurvePointDto
      */
     @Override
+    @Transactional
     public CurvePointDto update(Integer id, CurvePointDto curvePointDto) {
         CurvePoint curvePointToUpdate = mapper.toEntity(curvePointDto);
         curvePointToUpdate.setId(id);

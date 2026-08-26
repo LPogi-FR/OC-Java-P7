@@ -6,6 +6,7 @@ import com.nnk.springboot.exception.IdNotFoundException;
 import com.nnk.springboot.mapper.RatingMapper;
 import com.nnk.springboot.repositories.RatingRepository;
 import com.nnk.springboot.service.RatingService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -33,6 +34,7 @@ public class RatingServiceImpl implements RatingService {
      * @return List<RatingDto>
      */
     @Override
+    @Transactional
     public RatingDto save(RatingDto ratingDto) {
         repository.save(mapper.toEntity(ratingDto));
         return ratingDto;
@@ -43,6 +45,7 @@ public class RatingServiceImpl implements RatingService {
      * @param id Integer
      */
     @Override
+    @Transactional
     public void delete(Integer id) {
         repository.deleteById(id);
     }
@@ -54,6 +57,7 @@ public class RatingServiceImpl implements RatingService {
      * @return RatingDto
      */
     @Override
+    @Transactional
     public RatingDto update(Integer id, RatingDto ratingDto) {
         Rating ratingToUpdate = mapper.toEntity(ratingDto);
         ratingToUpdate.setId(id);

@@ -6,6 +6,7 @@ import com.nnk.springboot.exception.IdNotFoundException;
 import com.nnk.springboot.mapper.UserMapper;
 import com.nnk.springboot.repositories.UserRepository;
 import com.nnk.springboot.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
      * @return List<UserDto>
      */
     @Override
+    @Transactional
     public UserDto save(UserDto userDto) {
 
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
      * @param id Integer
      */
     @Override
+    @Transactional
     public void delete(Integer id) {
         repository.deleteById(id);
     }
@@ -59,6 +62,7 @@ public class UserServiceImpl implements UserService {
      * @return UserDto
      */
     @Override
+    @Transactional
     public UserDto update(Integer id, UserDto userDto) {
         User userToUpdate = mapper.toEntity(userDto);
         userToUpdate.setId(id);
