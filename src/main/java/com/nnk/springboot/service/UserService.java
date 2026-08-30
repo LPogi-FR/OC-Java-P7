@@ -1,7 +1,9 @@
 package com.nnk.springboot.service;
 
+import com.nnk.springboot.domain.User;
 import com.nnk.springboot.dto.UserDto;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -14,4 +16,6 @@ public interface UserService {
     UserDto update(Integer id, UserDto tradeDto);
 
     UserDto findById(Integer id);
+
+    boolean isUsernameUnique(String username);
 }

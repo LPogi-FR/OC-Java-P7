@@ -40,9 +40,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto save(UserDto userDto) {
 
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        repository.save(mapper.toEntity(userDto));
-        return userDto;
+            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            repository.save(mapper.toEntity(userDto));
+            return userDto;
     }
 
     /**
@@ -64,11 +64,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto update(Integer id, UserDto userDto) {
-        User userToUpdate = mapper.toEntity(userDto);
-        userToUpdate.setId(id);
-        userToUpdate.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        repository.save(userToUpdate);
-        return userDto;
+
+            User userToUpdate = mapper.toEntity(userDto);
+            userToUpdate.setId(id);
+            userToUpdate.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            repository.save(userToUpdate);
+            return userDto;
     }
 
     /**
@@ -84,6 +85,12 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IdNotFoundException("Id not found");
         }
+    }
+
+    @Override
+    public boolean isUsernameUnique(String username) {
+        Optional<User>optional = Optional.ofNullable(repository.findByUsername(username));
+        return optional.isEmpty();
     }
 
 }

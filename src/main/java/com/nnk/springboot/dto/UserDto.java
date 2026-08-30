@@ -1,5 +1,6 @@
 package com.nnk.springboot.dto;
 
+import com.nnk.springboot.utils.UniqueUsername;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -13,6 +14,7 @@ public class UserDto {
 
     private Integer id;
     @NotBlank(message = "Username is mandatory")
+    @UniqueUsername
     private String username;
     @NotBlank(message = "Password is mandatory")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$",message = " The password must contain at least 8 characters,one uppercase letter, one number and one symbol")

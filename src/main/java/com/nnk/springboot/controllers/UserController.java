@@ -39,21 +39,20 @@ public class UserController {
 
     @PostMapping("/user/validate")
     public String validate(@Valid UserDto userDto, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            log.error(result.getAllErrors().toString());
-            //model.addAttribute("userDto",userDto);
-            return "user/add";
 
-        }
-        service.save((userDto));
-        model.addAttribute("userDto", userDto);
-        return "redirect:/user/list";
+            if (result.hasErrors()) {
+                log.error(result.getAllErrors().toString());
+                return "user/add";
+
+            }
+            service.save((userDto));
+            model.addAttribute("userDto", userDto);
+            return "redirect:/user/list";
     }
 
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model,RedirectAttributes redirectAttributes) {
 
-        //model.addAttribute("userDto", service.findById(id));
         try{
             model.addAttribute("userDto",service.findById(id));
         }catch (IdNotFoundException e){
